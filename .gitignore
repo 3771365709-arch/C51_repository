@@ -1,0 +1,106 @@
+# ============================================================
+#  .gitignore — 嵌入式 + Trae/VSCode + 51单片机混合项目
+# ============================================================
+
+# ---------- 大文件 / 安装包 ----------
+*.deb
+*.rpm
+*.exe
+*.msi
+*.dmg
+*.AppImage
+
+# 可选：PDF 资料是否保留
+# 如果 PDF 太多太大想忽略，取消下一行注释
+# *.pdf
+
+# ---------- Keil C51 / uVision 编译产物 ----------
+*.obj
+*.lst
+*.map
+*.hex      # 烧录文件，看团队约定，要保留就注释掉
+*.bin
+*.elf
+*.bak
+*.uvgui.*
+*.uvopt
+*.uvprojx.user
+JLinkLog.txt
+
+# Keil 输出目录
+Objects/
+Listings/
+DebugConfig/
+Debug/
+Release/
+Build/
+
+# ---------- SDCC 编译产物 ----------
+*.ihx
+*.rel
+*.sym
+*.asm
+*.lk
+
+# ---------- Proteus 仿真 ----------
+*.pdsprj
+*.pdsprj.pc
+*.pdsprj.workspace
+
+# ---------- IAR / STM32CubeIDE ----------
+settings/
+*.ewp
+*.eww
+*.dep
+*.ewd
+
+# ---------- VSCode / Trae ----------
+# tasks.json 通常需要团队共享，保留
+# 但历史/缓存要忽略
+.vscode/.history/
+.vscode/*.log
+.vscode/.ropeproject/
+.trae/
+.history/
+
+# ---------- 通用编辑器临时文件 ----------
+*~
+*.swp
+*.swo
+*.tmp
+*.log
+~$*
+*.orig
+
+# ---------- 操作系统垃圾 ----------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ---------- Python（如果做上位机/测试脚本）----------
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+ruff_cache/
+
+# ---------- Node（如果有前端辅助）----------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ---------- 其他 ----------
+.aidata/
+.aimemory/
+.env
+.env.local

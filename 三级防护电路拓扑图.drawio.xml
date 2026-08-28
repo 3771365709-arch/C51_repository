@@ -1,0 +1,148 @@
+<mxfile host="app.diagrams.net" modified="2026-08-19T00:00:00.000Z" agent="Trae" version="24.0.0">
+  <diagram name="三级防护电路拓扑" id="three-stage-protection-topology">
+    <mxGraphModel dx="1422" dy="757" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- 标题 -->
+        <mxCell id="title" value="三级防护电路拓扑图（前级泄放 + 退耦缓冲 + 后级钳位）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="234" y="40" width="700" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- 浪涌输入 -->
+        <mxCell id="surge_in" value="浪涌输入&#10;（雷击/ESD/8/20μs）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 信号线主干 -->
+        <mxCell id="line1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#0066CC;" edge="1" parent="1" source="surge_in" target="gdt_mov">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 前级：GDT + MOV -->
+        <mxCell id="gdt_mov" value="前级防护（泄放）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="230" width="160" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="gdt" value="GDT 气体放电管&#10;通流 10kA&#10;响应 μs 级&#10;绝缘 >1GΩ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="235" y="250" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mov" value="MOV 压敏电阻&#10;通流 70kA&#10;响应 ns~μs 级&#10;V1mA 压敏电压" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="235" y="320" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 前级到退耦的连线 -->
+        <mxCell id="line2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#0066CC;" edge="1" parent="1" source="gdt_mov" target="decoupling">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 退耦级：电感 -->
+        <mxCell id="decoupling" value="退耦缓冲级" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="260" width="140" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inductor" value="退耦电感 L&#10;典型几十 μH&#10;作用：缓冲 + 限流&#10;使前级先动作" style="shape=mxgraph.electrical.inductors.inductor2;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="470" y="230" width="60" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inductor_note" value="退耦电感 L&#10;典型几十 μH&#10;作用：缓冲 + 限流&#10;使前级先动作" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="370" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 退耦到后级的连线 -->
+        <mxCell id="line3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#0066CC;" edge="1" parent="1" source="decoupling" target="tvs_stage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 后级：TVS -->
+        <mxCell id="tvs_stage" value="后级防护（钳位）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="230" width="160" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tvs" value="TVS 二极管&#10;响应 ps 级&#10;钳位电压 Vc&#10;Vc &lt; 芯片极限耐压" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="635" y="280" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 后级到负载的连线 -->
+        <mxCell id="line4" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#0066CC;" edge="1" parent="1" source="tvs_stage" target="load">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 负载端 -->
+        <mxCell id="load" value="被保护负载&#10;（FPGA / ADC / CPU&#10;等敏感芯片）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="830" y="280" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- GDT 接地 -->
+        <mxCell id="gnd1" value="PE&#10;保护地" style="shape=mxgraph.electrical.miscellaneous.earth_ground_1;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="285" y="410" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="gnd_line1" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#333333;strokeWidth=1;endSize=8;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="390" as="sourcePoint" />
+            <mxPoint x="300" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- MOV 接地 -->
+        <mxCell id="gnd2" value="PE" style="shape=mxgraph.electrical.miscellaneous.earth_ground_1;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="355" y="410" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="gnd_line2" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#333333;strokeWidth=1;endSize=8;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="370" y="390" as="sourcePoint" />
+            <mxPoint x="370" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- TVS 接地 -->
+        <mxCell id="gnd3" value="PE" style="shape=mxgraph.electrical.miscellaneous.earth_ground_1;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="685" y="410" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="gnd_line3" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#333333;strokeWidth=1;endSize=8;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="700" y="350" as="sourcePoint" />
+            <mxPoint x="700" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 残压标注 -->
+        <mxCell id="residual1" value="残压 ≈ 数百 V~kV" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#CC0000;" vertex="1" parent="1">
+          <mxGeometry x="180" y="200" width="120" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="residual2" value="残压降低" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#CC6600;" vertex="1" parent="1">
+          <mxGeometry x="430" y="230" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="residual3" value="残压 &lt; 芯片极限耐压" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#009900;" vertex="1" parent="1">
+          <mxGeometry x="620" y="200" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- 级别标注 -->
+        <mxCell id="level1" value="第 1 级&#10;初级泄放" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;fontColor=#0000CC;" vertex="1" parent="1">
+          <mxGeometry x="240" y="180" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="level2" value="第 2 级&#10;退耦缓冲" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;fontColor=#0000CC;" vertex="1" parent="1">
+          <mxGeometry x="440" y="180" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="level3" value="第 3 级&#10;末级钳位" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;fontColor=#0000CC;" vertex="1" parent="1">
+          <mxGeometry x="640" y="180" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- 设计原则说明框 -->
+        <mxCell id="principle" value="三段式防护设计哲学&#10;&#10;1. 前级泄放：GDT/MOV 扛下大部分雷击能量（kA 级），残压仍较高&#10;2. 退耦缓冲：电感限流 + 延时，使前级先动作、后级不误触发&#10;3. 后级钳位：TVS 精准钳位到芯片安全线（Vc &lt; 芯片极限耐压）&#10;&#10;本质：分级 dissipate 能量 + 逐级降低残压 + 各器件发挥所长" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="480" width="920" height="110" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
