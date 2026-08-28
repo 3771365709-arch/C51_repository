@@ -1,26 +1,22 @@
 /*
  * ===========================================================================
- *  51单片机双向流水灯控制程序（普中 STC89C52 开发板适配版）
+ *  51单片机双向流水灯控制程序（SDCC + 普中 STC89C52 开发板适配版）
  * ===========================================================================
- *  开发板硬件对应（以普中 A2/A3/A4 为参考，请按自己板子原理图核对）
- *  ----------------------------------------------------------
- *   - 主控芯片：STC89C52RC（DIP40）
- *   - 晶振    ：11.0592 MHz
- *   - LED     ：8个 LED 接 P2 口，共阳接法（低电平点亮）
- *   - 独立按键：K1~K4 接 P3.0~P3.3，按下为低电平
- *              K1 切换流向（左/右），K2 切换速度档
- *  ----------------------------------------------------------
- *  烧录方式：USB 串口下载（CH340）
+ *  硬件：8 LED 接 P2 口，共阳；K1/K2 接 P3.0/P3.1
+ *  晶振：11.0592 MHz
+ *  编译：sdcc 51双向流水灯.c
  * ===========================================================================
  */
-#include <reg52.h>
-#include <intrins.h>
+#include <mcs51/8052.h>
 
-#define LED_PORT  P2     // LED 端口
-#define KEY_DIR   P3^0   // K1：切换流水方向
-#define KEY_SPEED P3^1   // K2：切换流水速度
+#define LED_PORT  P2
+#define KEY_DIR   P3_0     // K1 切换方向
+#define KEY_SPEED P3_1     // K2 切换速度
 
-/* 延时函数：11.0592MHz 下粗略 1ms */
+/* 循环左/右移 1 位的宏（SDCC 无 _crol_/_cror_）*/
+#define CROL(c)  ((unsigned char)(((c) << 1) | ((c) >> 7)))
+#define CROR(c)  ((unsigned char)(((c) >> 1) | ((c) << 7)))
+
 void delay_ms(unsigned int ms)
 {
     unsigned int i, j;
@@ -28,50 +24,41 @@ void delay_ms(unsigned int ms)
         for (j = 0; j < 110; j++);
 }
 
-/* --------------------------------------------------------------------------
- *  主函数：双向流水灯
- *  原理：用 dir 标志记录方向
- *        dir=0：左移 _crol_，从 P2.0 流向 P2.7
- *        dir=1：右移 _cror_，从 P2.7 流回 P2.0
- *        到边界时翻转 dir，实现"往复"效果
- * -------------------------------------------------------------------------- */
 void main(void)
 {
-    unsigned char led   = 0xFE;   // 初始值：1111 1110，P2.0 亮
-    unsigned char dir   = 0;      // 方向：0=左移（0->7），1=右移（7->0）
-    unsigned char speed = 300;   // 流水间隔 ms
+    unsigned char led   = 0xFE;   // 1111 1110，P2.0 亮
+    unsigned char dir   = 0;      // 0=左移，1=右移
+    unsigned int  speed = 300;   // 用 int，因 300/600 超过 unsigned char 范围
 
     while (1)
     {
-        LED_PORT = led;          // 输出到 LED
-        delay_ms(speed);         // 按当前速度延时
+        LED_PORT = led;
+        delay_ms(speed);
 
         /* ---------- 双向移位 ---------- */
         if (dir == 0)
         {
-            led = _crol_(led, 1);    // 循环左移 1 位
-            if (led == 0x7F)         // 到达 P2.7（最高位亮）
-                dir = 1;             // 切换为右移
+            led = CROL(led);
+            if (led == 0x7F) dir = 1;     // 到 P2.7 切换
         }
         else
         {
-            led = _cror_(led, 1);    // 循环右移 1 位
-            if (led == 0xFE)         // 回到 P2.0
-                dir = 0;             // 切换为左移
+            led = CROR(led);
+            if (led == 0xFE) dir = 0;     // 回 P2.0 切换
         }
 
-        /* ---------- K1：手动切换方向 ---------- */
-        if (KEY_DIR == 0)            // K1 按下
+        /* K1 切换方向 */
+        if (KEY_DIR == 0)
         {
-            delay_ms(20);           // 消抖
+            delay_ms(20);
             if (KEY_DIR == 0)
             {
-                dir = !dir;          // 翻转方向
-                while (KEY_DIR == 0); /* 松手检测 */
+                dir = !dir;
+                while (KEY_DIR == 0);
             }
         }
 
-        /* ---------- K2：切换速度档（300→150→600→300） ---------- */
+        /* K2 切换速度档 */
         if (KEY_SPEED == 0)
         {
             delay_ms(20);
